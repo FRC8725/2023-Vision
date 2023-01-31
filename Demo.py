@@ -45,7 +45,7 @@ def main():
         if not ret:
             break
         
-        CDetect.ConeDetection(frame)
+        CDetect.ConeDetection(frame, frame)
 
         # print(output_img)
 
