@@ -1,13 +1,6 @@
 import cv2 as cv
 from math import atan, degrees, asin
 import numpy as np
-import json
-
-with open('camera.json', 'r') as jsonfile:
-    camera_data = json.load(jsonfile)
-width = camera_data['width']
-height = camera_data['height']
-ball_width = 0.4
 
 def ConeDetection(img, output_img):
     imgc = np.copy(img)
@@ -43,17 +36,22 @@ def ConeDetection(img, output_img):
         p2p3 = cv.norm(p2, p3, cv.NORM_L2)
         p1p3 = cv.norm(p1, p3, cv.NORM_L2)
         
+        if p1 == None or p2 == None or p3 == None: return 0;
+        
         if p1p2 < p2p3 and p1p2 < p1p3:
-            mid = ((p1[0]+p2[0])/2, (p1[1]+p2[1])/2)
-            angle = atan((p3[1]-mid[1])/(p3[0]-mid[0]))
+            mid = (int((p1[0]+p2[0])/2), int((p1[1]+p2[1])/2))
+            if (p3[0]-mid[0] == 0): angle = atan(p3[1]-mid[1])
+            else: angle = atan((p3[1]-mid[1])/(p3[0]-mid[0]))
             if (p3[0]-mid[0] < 0): angle -= 3.14;
         elif p2p3 < p1p2 and p2p3 < p1p3:
-            mid = ((p2[0]+p3[0])/2, (p2[1]+p3[1])/2)
-            angle = atan((p1[1]-mid[1])/(p1[0]-mid[0]))
+            mid = (int((p2[0]+p3[0])/2), int((p2[1]+p3[1])/2))
+            if (p1[0]-mid[0] == 0): angle = atan(p1[1]-mid[1])
+            else: angle = atan((p1[1]-mid[1])/(p1[0]-mid[0]))
             if (p1[0]-mid[0] < 0): angle -= 3.14;
         elif p1p3 < p2p3 and p1p3 < p1p2:
-            mid = ((p1[0]+p3[0])/2, (p1[1]+p3[1])/2)
-            angle = atan((p2[1]-mid[1])/(p2[0]-mid[0]))
+            mid = (int((p1[0]+p3[0])/2), int((p1[1]+p3[1])/2))
+            if (p2[0]-mid[0] == 0): angle = atan(p2[1]-mid[1])
+            else: angle = atan((p2[1]-mid[1])/(p2[0]-mid[0]))
             if (p2[0]-mid[0] < 0): angle -= 3.14;
     print(angle + 3.14/2)
     return angle + 3.14 / 2

@@ -1,6 +1,6 @@
 from cscore import CameraServer, UsbCamera
 # from networktables import NetworkTables
-from networktables import NetworkTablesInstance
+from ntcore import NetworkTableInstance
 
 import cv2 as cv
 import numpy as np
@@ -8,7 +8,6 @@ import time
 import json
 import sys
 
-import calTags
 import ConeDetection as CDetect
 
 configFile = "/boot/frc.json"
@@ -80,16 +79,9 @@ class CameraConfig: pass
 
 def main():
     global configFile
-    
-    with open('camera.json', 'r') as jsonfile:
-        camera_data = json.load(jsonfile)
         
     with open(configFile, 'r') as j:
         config = json.load(j)
-
-    widthbase = camera_data['width']
-    heightbase = camera_data['height']
-    fpsbase = camera_data['fps']
     
     cam_configs = config['cameras']
     for camcfg in cam_configs:
@@ -109,12 +101,11 @@ def main():
     
     CameraServer.enableLogging()
 
-    inst = CameraServer.getInstance()
     camera = UsbCamera(name=cameras[0].name, path=cameras[0].path)
-    inst.startAutomaticCapture(camera=camera)
+    CameraServer.startAutomaticCapture(camera=camera)
     
-    input_stream = inst.getVideo()
-    output_stream = inst.putVideo('Processed', width, height)
+    input_stream = CameraServer.getVideo()
+    output_stream = CameraServer.putVideo('Processed', width, height)
 
     # vision_nt = NetworkTables.getTable("Vision")
 
@@ -128,13 +119,14 @@ def main():
     if not readConfig():
         sys.exit(1)
     
-    ntinst = NetworkTablesInstance.getDefault()
+    ntinst = NetworkTableInstance.getDefault()
     if server:
         print("Setting up NetworkTables server")
         ntinst.startServer()
     else:
         print("Setting up NetworkTables client for team {}".format(team))
-        ntinst.startClientTeam(team)
+        ntinst.startClient4("wpilibpi")
+        ntinst.setServerTeam(team)
         ntinst.startDSClient()
 
     vision_nt = ntinst.getTable('Vision')
