@@ -154,6 +154,7 @@ def main():
         # cv.imshow('ttt', frame)
         vision_nt.putNumber("TestFPS", fps)
         vision_nt.putNumber("ConeAngle", angle)
+        # TODO: isCone
         
 if __name__ == '__main__': 
     main()

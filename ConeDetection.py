@@ -21,7 +21,7 @@ def ConeDetection(img, output_img):
     if len(cnts) != 0:
         
         cnt = max(cnts, key = cv.contourArea)
-        if cv.contourArea(cnt) < 1000: return 0
+        if cv.contourArea(cnt) < 2000: return 0
         approx = cv.approxPolyDP(cnt, 0.01*cv.arcLength(cnt, True), True)
         # hull = cv.convexHull(approx)
         _, triangle = cv.minEnclosingTriangle(approx)
