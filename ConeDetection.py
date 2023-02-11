@@ -17,8 +17,11 @@ def ConeDetection(img, output_img):
     
     cnts, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
     angle = 0
+    isCone = False
     
     if len(cnts) != 0:
+        
+        isCone = True
         
         cnt = max(cnts, key = cv.contourArea)
         if cv.contourArea(cnt) < 2000: return 0
@@ -54,8 +57,9 @@ def ConeDetection(img, output_img):
             if (p2[0]-mid[0] == 0): angle = atan(p2[1]-mid[1])
             else: angle = atan((p2[1]-mid[1])/(p2[0]-mid[0]))
             if (p2[0]-mid[0] < 0): angle -= 3.14;
-    print(angle + 3.14/2)
-    return angle + 3.14 / 2
+    # print(angle + 3.14/2)
+    print(isCone)
+    return angle + 3.14 / 2, isCone
                 
             
 if __name__ == '__main__':

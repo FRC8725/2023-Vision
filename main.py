@@ -143,8 +143,8 @@ def main():
             output_stream.notifyError(input_stream.getError())
             continue
         
-        angle = CDetect.ConeDetection(frame, output_img);
-
+        angle, isCone = CDetect.ConeDetection(frame, output_img);
+        
         pocessing_time = time.time() - start_time
         fps = 1/pocessing_time
         cv.putText(output_img, str(round(fps, 1)), (0, 40),
@@ -154,6 +154,7 @@ def main():
         # cv.imshow('ttt', frame)
         vision_nt.putNumber("TestFPS", fps)
         vision_nt.putNumber("ConeAngle", angle)
+        vision_nt.putNubmer("isCone", isCone)
         # TODO: isCone
         
 if __name__ == '__main__': 
