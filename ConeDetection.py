@@ -63,7 +63,7 @@ def ConeDetection(img, output_img, width, height):
                     else: angle = atan((p2[1]-mid[1])/(p2[0]-mid[0]))
                     if (p2[0]-mid[0] < 0): angle -= 3.14;
     # print(angle + 3.14/2)
-    print(isCone)
+    # print(isCone)
     return angle + 3.14 / 2, isCone
                 
             
