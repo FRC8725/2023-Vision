@@ -11,15 +11,15 @@ import ConeDetection as CDetect
 
 def main():
 
-    with open('camera.json', 'r') as jsonfile:
-        camera_data = json.load(jsonfile)
+    # with open('camera.json', 'r') as jsonfile:
+    #     camera_data = json.load(jsonfile)
     # setting the cameara matrix
     # mtx = np.array([[669.76134921, 0., 364.47532344],
     #                 [0., 669.8613114, 225.14641631],
     #                 [0., 0., 1.]])
-    width = camera_data['width']
-    height = camera_data['height']
-    fps = camera_data['fps']
+    # width = camera_data['width']
+    # height = camera_data['height']
+    # fps = camera_data['fps']
     
     width = 320
     height = 240
@@ -27,9 +27,9 @@ def main():
     #     [[0.09899272, -0.34263704, 0.00170763,  0.01447023,  1.06025138]])
     # dist = np.array([[0., 0., 0., 0., 0.]])
     cap = cv.VideoCapture(0)
-    cap.set(5, fps)
-    cap.set(3, width)
-    cap.set(4, height)
+    cap.set(cv.CAP_PROP_FRAME_COUNT, 60)
+    cap.set(cv.CAP_PROP_FRAME_WIDTH, width)
+    cap.set(cv.CAP_PROP_FRAME_HEIGHT, height)
 
     if not cap.isOpened():
         print("CAM error")
@@ -45,11 +45,12 @@ def main():
         if not ret:
             break
         
-        CDetect.ConeDetection(frame, frame)
+        output_img = np.copy(frame)
+        
+        CDetect.ConeDetection(frame, output_img, width=width, height=height)
 
         # print(output_img)
 
-        output_img = np.copy(frame)
         pocessing_time = time.time() - start_time
         fps = 1/pocessing_time
         cv.putText(output_img, str(round(fps, 1)), (0, 40), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))
