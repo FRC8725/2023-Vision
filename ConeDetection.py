@@ -20,8 +20,11 @@ def ConeDetection(img, output_img, width, height):
     
     cnts, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
     angle = 0
+    isCone = False
     
     if len(cnts) != 0:
+        
+        isCone = True
         
         cnt = max(cnts, key = cv.contourArea)
         if cv.contourArea(cnt) > thresh.size / 100:
